@@ -1,6 +1,6 @@
 import { randomUUIDv7 } from "bun";
 import type { MiddlewareHandler } from "hono";
-import { logger } from "../infra/logger";
+import { logger } from "@/infra/logger";
 
 export const loggingMiddleware: MiddlewareHandler = async (c, next) => {
   const requestId = randomUUIDv7();

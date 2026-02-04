@@ -1,51 +1,63 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 
+import { idempotencyMiddleware } from "../../middleware/idempotency.middleware";
 import { walletController } from "./wallet.controller";
 import { topUpSchema, bonusSchema, spendSchema } from "./wallet.validators";
-import { idempotencyMiddleware } from "../../middlewares/idempotency.middleware";
 
-export const walletRoutes = new Hono();
+interface WalletBindings {
+  Variables: {
+    idempotencyKey: string;
+  };
+}
+
+export const walletRoutes = new Hono<WalletBindings>();
 
 /**
  * Get wallet balance
  */
-walletRoutes.get("/:userId/balance", walletController.getBalance);
+walletRoutes.get("/balance", walletController.getBalance);
 
 /**
  * Get wallet ledger
  */
-walletRoutes.get("/:userId/ledger", walletController.getLedger);
+walletRoutes.get("/ledger", walletController.getLedger);
 
 /**
  * Wallet top-up (purchase)
- * Idempotent
  */
 walletRoutes.post(
   "/top-up",
   idempotencyMiddleware,
   zValidator("json", topUpSchema),
-  walletController.topUp,
+  async (c) => {
+    const body = c.req.valid("json");
+    return walletController.topUp(c, body);
+  },
 );
 
 /**
  * Bonus / incentive credit
- * Idempotent
  */
 walletRoutes.post(
   "/bonus",
   idempotencyMiddleware,
   zValidator("json", bonusSchema),
-  walletController.bonus,
+  async (c) => {
+    const body = c.req.valid("json");
+    return walletController.bonus(c, body);
+  },
 );
 
 /**
  * Spend credits
- * Idempotent + concurrency safe
  */
 walletRoutes.post(
   "/spend",
   idempotencyMiddleware,
   zValidator("json", spendSchema),
-  walletController.spend,
+  async (c) => {
+    const body = c.req.valid("json");
+    return walletController.spend(c, body);
+  },
 );

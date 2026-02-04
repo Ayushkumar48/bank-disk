@@ -31,4 +31,13 @@ export default [
       "@typescript-eslint/no-explicit-any": "warn",
     },
   },
+  {
+    settings: {
+      "import/resolver": {
+        typescript: {
+          project: "./tsconfig.json",
+        },
+      },
+    },
+  },
 ];

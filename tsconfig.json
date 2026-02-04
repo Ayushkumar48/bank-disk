@@ -4,5 +4,9 @@
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
     "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+    },
   },
 }
