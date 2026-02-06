@@ -4,10 +4,11 @@ import { logger } from "../infra/logger";
 export const errorMiddleware: MiddlewareHandler = async (c, next) => {
   try {
     await next();
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
     logger.error(
       {
-        err,
+        err: err instanceof Error ? err : { message: errorMessage },
         requestId: c.get("requestId"),
         path: c.req.path,
         method: c.req.method,

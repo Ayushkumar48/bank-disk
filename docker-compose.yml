@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: wallet_db
+      POSTGRES_USER: wallet_user
+      POSTGRES_PASSWORD: wallet_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://wallet_user:wallet_pass@db:5432/wallet_db
+    depends_on:
+      - db
+    command: sh -c "sleep 10 && bun run db:migrate && bun run db:seed && bun run dev"
+
+volumes:
+  postgres_data:

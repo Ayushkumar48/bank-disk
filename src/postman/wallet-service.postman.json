@@ -1,0 +1,192 @@
+{
+  "info": {
+    "name": "Bank-Disk",
+    "description": "API for managing Valorant digital wallets (VP, Radianite, Kingdom Credits) with top-up, spend, bonus, and ledger features.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "d4e5f6a7-b8c9-0123-def0-456789012345",
+      "type": "string",
+      "description": "Example user ID (Rahul from seed data)"
+    },
+    {
+      "key": "idempotencyKey",
+      "value": "{{$guid}}",
+      "type": "string",
+      "description": "Unique key for idempotent requests"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Balances",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{userId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/balances",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "balances"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Ledger",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{userId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/ledger",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "ledger"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Top Up Wallet",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{userId}}",
+            "type": "text"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"assetCode\": \"VP\",\n  \"amount\": 100,\n  \"description\": \"Top up Valorant Points\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/top-up",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "top-up"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Give Bonus",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{userId}}",
+            "type": "text"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"assetCode\": \"RAD\",\n  \"amount\": 50,\n  \"description\": \"Bonus Radianite\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/bonus",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "bonus"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Spend from Wallet",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{userId}}",
+            "type": "text"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotencyKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"assetCode\": \"KC\",\n  \"amount\": 20,\n  \"description\": \"Spend on Kingdom Credits\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/spend",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "spend"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Metrics",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/metrics",
+          "host": ["{{baseUrl}}"],
+          "path": ["metrics"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
