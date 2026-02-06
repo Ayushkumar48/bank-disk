@@ -1,7 +1,7 @@
 import type { Context } from "hono";
+import { requireUserId } from "./utils";
 import { walletService } from "./wallet.service";
 import type { BonusInput, SpendInput, TopUpInput } from "./wallet.validators";
-import { requireUserId } from "@/utils/wallet";
 
 export const walletController = {
   /**
